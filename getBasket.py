@@ -13,11 +13,11 @@ mySlots = []
 print(datetime.today())
 while True:
     checkDate = (datetime.today() + timedelta(days=2)).strftime('%d-%m-%Y')
-    print('Running for date ' + cDate)
     if not cDate == checkDate:
+        print('Date changed')
         foundSlotForToday = False
         cDate = checkDate
-        print('Date changed')
+    print('Running for date ' + cDate)
     while not foundSlotForToday:
         ctr += 1
         print('Run : ' + str(ctr))
