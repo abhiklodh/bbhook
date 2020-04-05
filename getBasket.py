@@ -34,7 +34,7 @@ while True:
                                 printSlots += str(s['slot']) + " is available for " + checkDate + "!\n"
                             envelope = Envelope(
                                 from_addr=(u'rishabh@bigbasket.com', u'Rishabh Jain'),
-                                to_addr=(u'a~yushi201098@gmail.com', u'Ayushi Sharma'),
+                                to_addr=(u'ayushi201098@gmail.com', u'Ayushi Sharma'),
                                 cc_addr=(u'yorishabhjain@gmail.com', u'Rishabh Jain'),
                                 subject=u'BB Update: Slot is available!',
                                 text_body=printSlots
