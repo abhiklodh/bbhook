@@ -42,4 +42,5 @@ while True:
                             print(printSlots)
                             envelope.send('smtp.googlemail.com', login='yorishabhjain@gmail.com',
                                           password='nvyodlgxuwxviiwv', tls=True)
+        sleep(300)
     sleep(300)
