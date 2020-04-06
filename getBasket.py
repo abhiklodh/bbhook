@@ -10,7 +10,7 @@ foundSlotForToday = False
 cDate = None
 ctr = 0
 mySlots = []
-print("\nRun Time: "+datetime.today())
+print("\nRun Time: "+str(datetime.today()))
 while True:
     checkDate = (datetime.today() + timedelta(days=2)).strftime('%d-%m-%Y')
     if not cDate == checkDate:
