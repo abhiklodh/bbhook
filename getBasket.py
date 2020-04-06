@@ -29,18 +29,19 @@ while True:
                         if k['available']:
                             foundSlotForToday = True
                             mySlots.append(k)
-        printSlots = ''
-        for s in mySlots:
-            printSlots += str(s['slot']) + " is available for " + checkDate + "!\n"
-        envelope = Envelope(
-            from_addr=(u'rishabh@bigbasket.com', u'Rishabh Jain'),
-            to_addr=(u'ayushi201098@gmail.com', u'Ayushi Sharma'),
-            cc_addr=(u'yorishabhjain@gmail.com', u'Rishabh Jain'),
-            subject=u'BB Update: Slot is available!',
-            text_body=printSlots
-        )
-        print(printSlots)
-        envelope.send('smtp.googlemail.com', login='yorishabhjain@gmail.com',
-                      password='nvyodlgxuwxviiwv', tls=True)
+        if foundSlotForToday:
+            printSlots = ''
+            for s in mySlots:
+                printSlots += str(s['slot']) + " is available for " + checkDate + "!\n"
+            envelope = Envelope(
+                from_addr=(u'rishabh@bigbasket.com', u'Rishabh Jain'),
+                to_addr=(u'ayushi201098@gmail.com', u'Ayushi Sharma'),
+                cc_addr=(u'yorishabhjain@gmail.com', u'Rishabh Jain'),
+                subject=u'BB Update: Slot is available!',
+                text_body=printSlots
+            )
+            print(printSlots)
+            envelope.send('smtp.googlemail.com', login='yorishabhjain@gmail.com',
+                          password='nvyodlgxuwxviiwv', tls=True)
         sleep(300)
     sleep(300)
