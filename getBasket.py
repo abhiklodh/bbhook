@@ -22,26 +22,29 @@ while True:
         ctr += 1
         print('Run : ' + str(ctr))
         response = requests.request("GET", url, headers=headers, cookies=cookies).json()
-        for i in response['details']['shipment_groups'][0]['shipments'][0]['slots']:
-            if i['sd_str'] == checkDate:
-                for j in i['slots']:
-                    for k in j:
-                        if k['available']:
-                            foundSlotForToday = True
-                            mySlots.append(k)
-        if foundSlotForToday:
-            printSlots = ''
-            for s in mySlots:
-                printSlots += str(s['slot']) + " is available for " + checkDate + "!\n"
-            envelope = Envelope(
-                from_addr=(u'rishabh@bigbasket.com', u'Rishabh Jain'),
-                to_addr=(u'ayushi201098@gmail.com', u'Ayushi Sharma'),
-                cc_addr=(u'yorishabhjain@gmail.com', u'Rishabh Jain'),
-                subject=u'BB Update: Slot is available!',
-                text_body=printSlots
-            )
-            print(printSlots)
-            envelope.send('smtp.googlemail.com', login='yorishabhjain@gmail.com',
-                          password='nvyodlgxuwxviiwv', tls=True)
+        try:
+            for i in response['details']['shipment_groups'][0]['shipments'][0]['slots']:
+                if i['sd_str'] == checkDate:
+                    for j in i['slots']:
+                        for k in j:
+                            if k['available']:
+                                foundSlotForToday = True
+                                mySlots.append(k)
+            if foundSlotForToday:
+                printSlots = ''
+                for s in mySlots:
+                    printSlots += str(s['slot']) + " is available for " + checkDate + "!\n"
+                envelope = Envelope(
+                    from_addr=(u'rishabh@bigbasket.com', u'Rishabh Jain'),
+                    to_addr=(u'ayushi201098@gmail.com', u'Ayushi Sharma'),
+                    cc_addr=(u'yorishabhjain@gmail.com', u'Rishabh Jain'),
+                    subject=u'BB Update: Slot is available!',
+                    text_body=printSlots
+                )
+                print(printSlots)
+                envelope.send('smtp.googlemail.com', login='yorishabhjain@gmail.com',
+                              password='nvyodlgxuwxviiwv', tls=True)
+        except IndexError:
+            print(response)
         sleep(300)
     sleep(300)
