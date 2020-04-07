@@ -44,7 +44,7 @@ while True:
                 print(printSlots)
                 envelope.send('smtp.googlemail.com', login='yorishabhjain@gmail.com',
                               password='nvyodlgxuwxviiwv', tls=True)
-        except IndexError:
-            print(response)
+        except:
+            print('Error:',response)
         sleep(300)
     sleep(300)
