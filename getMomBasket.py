@@ -4,30 +4,37 @@ from datetime import datetime, timedelta
 from envelopes import Envelope
 
 url = "https://www.bigbasket.com/co/delivery-preferences-new/"
-cookies = {'sessionid': '1ahwfayyfma1g4z1js8bqauao90k2m6i'}
-headers = {'X-Requested-With': 'XMLHttpRequest'}
+url = "https://www.bigbasket.com/co/update-po/"
+cookies = {
+    'sessionid': 'tvgo6fj8ony2arfbxfbjxnafg8kkiixc',
+    '_bb_mid': 'MzE0MzEyNzcxNw==',
+    'csrftoken': 'gEjvfAzMxZ3PFRfPbrHag2Gcc2EXdkrBwOke3tDZKmVaMKfdiooU4NhIFzO0PXyC',
+}
+headers = {'X-Requested-With': 'XMLHttpRequest',
+           'X-CSRFToken': 'gEjvfAzMxZ3PFRfPbrHag2Gcc2EXdkrBwOke3tDZKmVaMKfdiooU4NhIFzO0PXyC',
+           'Referer': 'https://www.bigbasket.com/basket/?ver=1'}
+
+data = {
+  'addr_id': '137490997'
+}
 foundSlotForToday = False
 cDate = None
 ctr = 0
 mySlots = []
-print("\nRun Time:", str(datetime.today()))
+print("\nRun Time: " + str(datetime.today()))
 while True:
     checkDate = (datetime.today() + timedelta(days=2)).strftime('%d-%m-%Y')
     if not cDate == checkDate:
         print('Date changed')
         foundSlotForToday = False
         cDate = checkDate
-    print("Running for date", cDate)
+    print('Running for date ' + cDate)
     while not foundSlotForToday:
         ctr += 1
-        print('Run : ' + str(ctr), str(datetime.today()))
+        print('Run : ' + str(ctr))
+        response = requests.request("POST", url, headers=headers, cookies=cookies, data=data)
         try:
-            response = requests.get(url, headers=headers, cookies=cookies).json()
-        except:
-            response = "Failed to connect to BigBasket."
-            sleep(300)
-        try:
-            for i in response['details']['shipment_groups'][0]['shipments'][0]['slots']:
+            for i in response.json()['details']['shipment_groups'][0]['shipments'][0]['slots']:
                 if i['sd_str'] == checkDate:
                     for j in i['slots']:
                         for k in j:
@@ -46,9 +53,8 @@ while True:
                     text_body=printSlots
                 )
                 print(printSlots)
-                envelope.send('smtp.googlemail.com', login='yorishabhjain@gmail.com',
-                              password='nvyodlgxuwxviiwv', tls=True)
+                # envelope.send('smtp.googlemail.com', login='yorishabhjain@gmail.com', password='nvyodlgxuwxviiwv',tls=True)
         except:
             print('Error:', response)
-        sleep(300)
+        # sleep(10)
     sleep(300)
