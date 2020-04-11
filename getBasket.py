@@ -31,10 +31,8 @@ while True:
             response = "Failed to connect to BigBasket."
             sleep(300)
         try:
-            shipment_id = response['details']['shipment_groups'][0]['shipments'][0]['shipment_id']
-            fulfillment_id = response['details']['shipment_groups'][0]['shipments'][0]['fulfillment_id']
-            linked_shipments = response['details']['shipment_groups'][0]['shipments'][0]['linked_shipments']
-            for i in response['details']['shipment_groups'][0]['shipments'][0]['slots']:
+            shipment = response['details']['shipment_groups'][0]['shipments'][0]
+            for i in shipment['slots']:
                 if i['sd_str'] == checkDate:
                     for j in i['slots']:
                         for k in j:
@@ -42,14 +40,13 @@ while True:
                                 foundSlotForToday = True
                                 mySlots.append(k)
             if foundSlotForToday:
-                error = ''
                 printSlots = ''
+                error = 'Slot is available!'
                 for s in mySlots:
                     printSlots += str(s['slot']) + " is available for " + checkDate + "!\n"
                 print(printSlots)
                 try:
-                    summary = summary()
-                    val = summary['details']['order_summary']['sub_total']
+                    val = summary()['details']['order_summary']['sub_total']
                     print("Order value :", val)
                     slot = mySlots[0]
                     if float(val) > 600:
@@ -59,9 +56,9 @@ while True:
                                     "slot_date": slot['slot_date'],
                                     "slot_id": slot['slot_id'],
                                     "bb_star_avail": slot['bb_star_avail'],
-                                    "shipment_id": shipment_id,
-                                    "fulfillment_id": fulfillment_id,
-                                    "linked_shipments": linked_shipments
+                                    "shipment_id": shipment['shipment_id'],
+                                    "fulfillment_id": shipment['fulfillment_id'],
+                                    "linked_shipments": shipment['linked_shipments']
                                 }
                             ],
                             "contactless": "false"
@@ -72,12 +69,16 @@ while True:
                             order = order(data)
                             print("Order :", order)
                             try:
-                                print("Place :", place().json())
+                                place = place()
+                                print("Place :", place)
+                                print("Place :", place.json())
                             except:
-                                error = "Faliure in place"
+                                error = "Failure in place"
                             print(order.json())
                         except:
-                            error = "Faliure in order"
+                            error = "Failure in order"
+                        error = "Order Placed!!!\n\n"
+                        raise Exception
                     else:
                         error = "Order value less than 600! Add more items!!\n\n"
                         foundSlotForToday = False
@@ -87,7 +88,7 @@ while True:
                         from_addr=(u'rishabh@bigbasket.com', u'Rishabh Jain'),
                         to_addr=(u'ayushi201098@gmail.com', u'Ayushi Sharma'),
                         cc_addr=(u'yorishabhjain@gmail.com', u'Rishabh Jain'),
-                        subject=u'BB Update: Slot is available!',
+                        subject=u'BB Update: ' + error,
                         text_body=error + printSlots
                     )
                     print("Error:", error)
