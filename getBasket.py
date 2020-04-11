@@ -80,6 +80,7 @@ while True:
                             error = "Faliure in order"
                     else:
                         error = "Order value less than 600! Add more items!!\n\n"
+                        foundSlotForToday = False
                         raise Exception
                 except:
                     envelope = Envelope(
